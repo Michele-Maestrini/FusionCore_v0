@@ -98,11 +98,11 @@ All downstream modelling artefacts reference the exact FusionCore dataset versio
 
 FusionCore v0 includes a **reference Temporal Fusion Transformer configuration** used to validate fused datasets.
 
-### Purpose
+### 1. Purpose
 
 To confirm that FusionCore outputs are structurally and temporally compatible with advanced sequence-based models used in system health and degradation analysis.
 
-### Baseline Configuration
+### 2. Baseline Configuration
 
 * Model type: Temporal Fusion Transformer
 * Framework: PyTorch Forecasting
@@ -114,7 +114,7 @@ To confirm that FusionCore outputs are structurally and temporally compatible wi
 * Normalisation: Group-wise (per entity)
 * Loss function: MAE or RMSE
 
-### Scope Constraints
+### 3. Scope Constraints
 
 * Offline training only
 * No real-time inference
@@ -127,7 +127,7 @@ To confirm that FusionCore outputs are structurally and temporally compatible wi
 
 FusionCore v0 uses **public, well-documented datasets from leading aerospace research organisations**, ensuring relevance to space-adjacent systems and long-term mission reliability.
 
-### Primary Dataset (Anchor Time Series)
+### 1. Primary Dataset (Anchor Time Series)
 
 **NASA Turbofan Engine Degradation Dataset (C-MAPSS)**
 Provider: NASA Ames Prognostics Center of Excellence
@@ -145,7 +145,7 @@ Provider: NASA Ames Prognostics Center of Excellence
 
 ---
 
-### Event & Label Data
+### 2. Event & Label Data
 
 **Failure and Degradation Annotations (C-MAPSS)**
 Provider: NASA Ames Prognostics Center of Excellence
