@@ -1,187 +1,187 @@
-<img width="1860" height="417" alt="AX-FC" src="https://github.com/user-attachments/assets/1e6cf905-6252-4c59-8e3e-eed19502efcb" />
 
-# FusionCore
+<img width="366" height="87" alt="Astrolytics Logo" src="https://github.com/user-attachments/assets/3e169c93-329b-4fa3-9f4b-feea2e2e3afe" />
 
-**FusionCore** is an end-to-end temporal intelligence pipeline designed to ingest, fuse, and analyse heterogeneous time-series datasets at scale, with a primary focus on predictive maintenance and system health forecasting for space and aerospace systems.
 
-FusionCore integrates data ingestion, temporal harmonisation, feature construction, and sequence-based time-series modelling into a single, reproducible workflow. The reference modelling implementation uses a **Temporal Fusion Transformer (TFT)** to validate the integrity and usefulness of the fused datasets.
+## Overview
 
-The project is intentionally foundational. Each version builds upon the previous one, enabling the progressive development of more advanced AI technologies for space exploration, including long-duration missions, lunar and Martian operations, and future asteroid mining systems.
+Astrolytics builds foundational artificial intelligence systems for reasoning over complex, noisy, and high‑stakes temporal data in mission‑critical domains.
+
+Our focus is not on single models or isolated predictions, but on **temporal intelligence**: the ability to understand how systems evolve over time, detect early signals of degradation, and support human decision‑making under uncertainty.
+
+---
+<img width="327" height="123" alt="Xplor" src="https://github.com/user-attachments/assets/cb7848b6-77a1-4525-88a6-c704e8220059" />
+
+## **Xplor** - Astrolytics’ AI ecosystem.
+
+It is a shared platform where specialised intelligence systems:
+
+* Interact through common data and temporal abstractions
+* Exchange context and outputs safely
+* Evolve iteratively without breaking downstream assumptions
+
+Xplor is not a single model or product. It is an ecosystem defined by:
+
+* Canonical data schemas
+* Explicit temporal contracts
+* Reproducibility and lineage guarantees
+* Model‑agnostic integration principles
+
+All Astrolytics intelligence systems are designed to be **Xplor‑native**.
+
+---
+<img width="273" height="121" alt="FusionCore" src="https://github.com/user-attachments/assets/692079cc-0f95-4386-bf88-2256625293c6" />
+
+## First Xplor‑Native Intelligence System
+
+**FusionCore** is the first intelligence system built within the Xplor ecosystem.
+
+FusionCore provides an end‑to‑end temporal intelligence pipeline that:
+
+* Ingests heterogeneous time‑series data
+* Enforces schema and data quality guarantees
+* Harmonises and aligns temporal signals
+* Fuses multi‑source data into coherent timelines
+* Produces model‑ready datasets for sequence‑based analysis
+
+FusionCore establishes the foundational data and temporal contracts that future Xplor systems will build upon.
 
 ---
 
-## Architecture Overview
+## FusionCore v0 — Explicit Scope
 
-FusionCore is implemented as a **layered, end-to-end temporal intelligence system**.
+FusionCore **v0 is intentionally a proving ground**.
 
-### 1. Ingestion Layer (Raw / Bronze)
+It exists to:
 
-* Batch ingestion of heterogeneous datasets (time series, events, metadata)
-* Immutable preservation of raw source data
-* Capture of provenance, ingestion timestamps, and dataset versions
-* Support for CSV, Parquet, and JSON formats
+* Validate architectural and data assumptions
+* Develop deep familiarity with real prognostics datasets
+* Experiment safely with time‑series modelling approaches
+* Establish reproducible end‑to‑end workflows
 
-**Output:** Source-faithful raw datasets with no silent transformations.
+FusionCore v0 is **not**:
 
----
+* A production system
+* A real‑time inference platform
+* An autonomous decision‑making system
+* An optimisation‑focused modelling effort
 
-### 2. Harmonisation & Quality Layer (Silver)
-
-* Schema validation and schema versioning
-* Data quality checks (nulls, ranges, duplicates)
-* Canonical identifier mapping (e.g. asset or engine identifiers)
-* Temporal standardisation to a canonical time index
-* Explicit handling of gaps and irregular sampling
-
-**Output:** Clean, standardised, temporally consistent datasets.
+Learning, validation, and reproducibility take priority over performance.
 
 ---
 
-### 3. Fusion & Feature Layer (Gold)
+## Dataset Strategy (v0)
 
-* Multi-source temporal alignment using entity keys and time
-* Anchor time-series designation
-* Construction of model-ready features:
+FusionCore v0 is deliberately scoped to a **single canonical dataset** to maintain clarity and scientific discipline.
 
-  * Time-varying observed covariates
-  * Time-varying known covariates
-  * Optional static attributes
-* Label generation for degradation modelling (e.g. Remaining Useful Life)
+### Primary Dataset
 
-**Output:** Analysis-ready fused datasets suitable for sequence-based modelling.
+* **NASA C‑MAPSS Turbofan Engine Degradation Dataset**
+* Multivariate run‑to‑failure time series
+* Explicit Remaining Useful Life (RUL) ground truth
+* Widely accepted benchmark in prognostics research
 
----
+This dataset serves as:
 
-### 4. Modelling Layer (Temporal Fusion Transformer)
+* The anchor time series
+* The basis for temporal harmonisation and fusion logic
+* The reference substrate for modelling experiments
 
-* Offline training of a Temporal Fusion Transformer (TFT)
-* Grouped sequence modelling (per asset or system)
-* Encoder–decoder temporal windows
-* Strict prevention of temporal leakage
-* Baseline configuration used for validation, not hyper-optimisation
-
-**Output:** Predictive degradation forecasts and model diagnostics.
+No additional datasets are introduced in v0.
 
 ---
 
-### 5. Evaluation & Reproducibility Layer
+## Data Architecture
 
-* Baseline forecasting metrics (e.g. MAE, RMSE)
-* Stability checks across repeated runs
-* Full traceability to dataset versions, schemas, and model configurations
+FusionCore uses a **Bronze–Silver–Gold** layered data architecture.
 
----
+### Bronze — Raw
 
-## Data Lineage & Versioning
+* Immutable ingestion of source data
+* Full provenance and auditability
 
-FusionCore enforces **explicit data lineage and version control** at every stage of the pipeline.
+### Silver — Clean & Aligned
 
-* **Raw (Bronze):**
-  Immutable snapshots of source datasets with ingestion timestamps and dataset identifiers.
+* Schema enforcement and versioning
+* Explicit data quality flags
+* Canonical temporal indexing
 
-* **Clean (Silver):**
-  Versioned schemas and validated records; no destructive overwrites.
+### Gold — Analysis‑Ready
 
-* **Fused (Gold):**
-  Deterministic outputs tagged with:
+* Fused, wide‑format time series
+* Derived degradation targets (e.g. RUL)
+* Versioned, reproducible modelling inputs
 
-  * Dataset version
-  * Schema version
-  * Configuration hash
-  * Execution timestamp
-
-All downstream modelling artefacts reference the exact FusionCore dataset version used for training, ensuring full reproducibility.
+This architecture exists to prevent temporal leakage, preserve traceability, and support controlled experimentation.
 
 ---
 
-## Model Configuration Summary (TFT)
+## Modelling Strategy (v0)
 
-FusionCore v0 includes a **reference Temporal Fusion Transformer configuration** used to validate fused datasets.
+Modelling in FusionCore v0 is **experimental and evaluative**.
 
-### 1. Purpose
+### Reference Models
 
-To confirm that FusionCore outputs are structurally and temporally compatible with advanced sequence-based models used in system health and degradation analysis.
+* Amazon Chronos
+* Temporal Fusion Transformer (TFT)
 
-### 2. Baseline Configuration
+### Modelling Objectives
 
-* Model type: Temporal Fusion Transformer
-* Framework: PyTorch Forecasting
-* Task: Regression (Remaining Useful Life)
-* Group identifier: `asset_id` / `engine_id`
-* Time index: `cycle` or canonical timestamp
-* Encoder window: 30–50 timesteps
-* Prediction horizon: 1 timestep (baseline)
-* Normalisation: Group-wise (per entity)
-* Loss function: MAE or RMSE
+* Validate compatibility with FusionCore outputs
+* Compare modelling assumptions and behaviour
+* Understand sensitivity to temporal structure and preprocessing
 
-### 3. Scope Constraints
-
-* Offline training only
-* No real-time inference
-* No hyperparameter optimisation beyond baseline
-* Model accuracy is not a v0 acceptance criterion
+Model accuracy is **not** an acceptance criterion for v0.
 
 ---
 
-## Datasets
+## Reproducibility and Reliability
 
-FusionCore v0 uses **public, well-documented datasets from leading aerospace research organisations**, ensuring relevance to space-adjacent systems and long-term mission reliability.
+FusionCore is designed with strong guarantees:
 
-### 1. Primary Dataset (Anchor Time Series)
+* Immutable raw data
+* Versioned schemas and datasets
+* Deterministic pipeline execution
+* Explicit lineage tracking
+* Recoverability from partial failures
 
-**NASA Turbofan Engine Degradation Dataset (C-MAPSS)**
-Provider: NASA Ames Prognostics Center of Excellence
-
-* Multivariate run-to-failure time series
-* Multiple sensor channels per engine
-* Explicit degradation trajectories
-* Widely used benchmark in prognostics research
-
-**Role in FusionCore**
-
-* Anchor time series
-* Primary source for temporal fusion and modelling
-* Remaining Useful Life (RUL) target generation
+These guarantees are foundational requirements for all future Xplor‑native systems.
 
 ---
 
-### 2. Event & Label Data
+## What Comes Next (Post‑v0)
 
-**Failure and Degradation Annotations (C-MAPSS)**
-Provider: NASA Ames Prognostics Center of Excellence
+Once FusionCore v0 has fulfilled its role as a proving ground, the next phases are intentionally sequential and gated.
 
-* End-of-life indicators
-* Failure cycle annotations
+### Phase 1 — Model Selection and Validation
 
-**Role in FusionCore**
+* Identify the most suitable time‑series model(s) based on empirical behaviour, stability, and compatibility with FusionCore outputs
+* Compare candidates such as Amazon Chronos and Temporal Fusion Transformer under consistent data contracts
+* Select models based on robustness and interpretability, not peak accuracy alone
 
-* Event alignment
-* Supervised learning targets
-* Temporal integrity validation
+### Phase 2 — Hyperparameter Optimisation
 
----
+* Perform systematic hyperparameter fine‑tuning on the selected model(s)
+* Maintain strict controls to prevent temporal leakage
+* Track experiments, configurations, and results deterministically
 
-## Dataset Download Instructions & URLs
+### Phase 3 — Multi‑Dataset Fusion
 
-### NASA C-MAPSS (Primary Dataset)
+* Introduce additional datasets incrementally
+* Validate temporal alignment, schema compatibility, and fusion policies per dataset
+* Re‑evaluate model behaviour under increased data heterogeneity
 
-* [NASA PCoE Data Repository:](https://data.nasa.gov/dataset/cmapss-jet-engine-simulated-data)
+### Phase 4 — MLOps and Scalability
 
-Download the appropriate `FD00x` dataset archive and place it in the `raw/` directory.
+* Design a scalable, repeatable training and evaluation pipeline
+* Introduce experiment tracking, model versioning, and dataset version control
+* Prepare FusionCore for larger‑scale operation without changing its core temporal contracts
 
----
-
-## Scope (v0)
-
-FusionCore v0 is an **offline, experimental research system**.
-It is **not** a production platform and does not provide real-time inference or automated decision-making.
-
----
-
-## Long-Term Vision
-
-FusionCore is the foundational intelligence layer for **Astrolytics Xplorion**.
-Future systems will extend this core to support increasingly autonomous, resilient AI technologies for space exploration—from Earth orbit to the Moon, Mars, and future asteroid mining operations.
+These phases are deliberately excluded from v0 and are only pursued once foundational assumptions have been validated.
 
 ---
 
+## Guiding Principle
+
+Complex systems fail quietly before they fail catastrophically.
+
+Astrolytics exists to surface those signals early — not to replace human judgement, but to extend it by giving engineers and operators the time and insight required to act.
