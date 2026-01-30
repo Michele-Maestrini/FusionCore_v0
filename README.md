@@ -1,5 +1,21 @@
+<img width="378" height="171" alt="Predictive Intelligence-Cropped" src="https://github.com/user-attachments/assets/09287d6d-cfb7-45f3-8731-bb020f046b55" />
+
+**Predictive Intelligence** is a research-led project focused on developing **decision-grade AI systems** for complex, high-risk environments.
+
+The project follows a staged approach, progressing from foundational model research to scalable system design.
+
+**FusionCore** provides the research and benchmarking layer, evaluating **risk-aware temporal models** for predictive maintenance and system reliability. It focuses on model behaviour, uncertainty, and failure modes under controlled and reproducible experimental conditions.
+
+Building on this foundation, **FusionScale** extends validated models into **scalable, agentic systems**, incorporating orchestration, retrieval-augmented reasoning (RAG), and multi-agent workflows to support real-world decision making.
+
+Together, FusionCore and FusionScale define a structured path from experimental time-series modelling to operational predictive intelligence.
+
+
 <img width="273" height="121" alt="FusionCore" src="https://github.com/user-attachments/assets/692079cc-0f95-4386-bf88-2256625293c6" />
 
+<img width="330" height="172" alt="image" src="https://github.com/user-attachments/assets/7f1f50a0-fb2c-4b0d-ba99-a50eb491cc1f" />
+
+---
 # FusionCore v0 — Model Benchmarking for Temporal Intelligence
 
 ## What This Is
