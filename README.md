@@ -1,4 +1,5 @@
 <img width="273" height="121" alt="FusionCore" src="https://github.com/user-attachments/assets/692079cc-0f95-4386-bf88-2256625293c6" />
+
 # FusionCore v0 — Model Benchmarking for Temporal Intelligence
 
 ## What This Is
