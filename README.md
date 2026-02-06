@@ -1,87 +1,109 @@
-<img width="378" height="171" alt="Predictive Intelligence-Cropped" src="https://github.com/user-attachments/assets/09287d6d-cfb7-45f3-8731-bb020f046b55" />
-
-**Predictive Intelligence** is a research-led project focused on developing **decision-grade AI systems** for complex, high-risk environments.
-
-The project follows a staged approach, progressing from foundational model research to scalable system design.
-
-**FusionCore** provides the research and benchmarking layer, evaluating **risk-aware temporal models** for predictive maintenance and system reliability. It focuses on model behaviour, uncertainty, and failure modes under controlled and reproducible experimental conditions.
-
-Building on this foundation, **FusionScale** extends validated models into **scalable, agentic systems**, incorporating orchestration, retrieval-augmented reasoning (RAG), and multi-agent workflows to support real-world decision making.
-
-Together, FusionCore and FusionScale define a structured path from experimental time-series modelling to operational predictive intelligence.
-
-
 <img width="273" height="121" alt="FusionCore" src="https://github.com/user-attachments/assets/692079cc-0f95-4386-bf88-2256625293c6" />
 
-<img width="330" height="172" alt="image" src="https://github.com/user-attachments/assets/7f1f50a0-fb2c-4b0d-ba99-a50eb491cc1f" />
 
----
-# FusionCore v0 — Model Benchmarking for Temporal Intelligence
+# FusionCore: Risk-Aware Predictive Maintenance System
 
-## What This Is
-
-**FusionCore v0** is a research benchmark designed to evaluate **modern time-series models** for predictive maintenance and system reliability.
-
-Its purpose is to **de-risk architectural decisions early** by empirically comparing leading approaches under identical experimental conditions.
-
-This repository represents the **foundational research layer** of FusionCore.
+**FusionCore** is a research-led benchmarking framework designed to solve the "Cold Start" and "Regime Shift" problems in aerospace prognostics. Unlike standard RUL regressors, FusionCore evaluates the trade-off between **Model Explainability** (TFT) and **Inference Latency** (TSMixer) to determine the optimal deployment architecture for edge-constrained environments.
 
 ---
 
-## Why This Matters
+## 1. Executive Summary
 
-In safety-critical domains (aerospace, space systems, energy infrastructure), model choice directly impacts:
+Predictive maintenance in safety-critical domains (Aerospace, Space) requires more than just low RMSE. It demands **reliability under regime shift** and **interpretability for human engineers**.
 
-* False positives vs missed failures
-* System downtime and operational cost
-* Risk to assets and human life
-
-FusionCore v0 focuses on **understanding model behaviour**, not chasing leaderboard metrics.
+FusionCore v0 establishes a rigorous "Ground Truth" by benchmarking three distinct architectural paradigms against the NASA CMAPSS Gold Standard. The goal is not just to predict failure, but to de-risk the architectural decision-making process for future industrial deployment.
 
 ---
 
-## What v0 Evaluates
+## 2. The Problem
 
-Three state-of-the-art time-series approaches are benchmarked using the **same dataset, features, and splits**:
+Standard deep learning models often fail in real-world industrial settings due to two critical blind spots:
 
-* Temporal Fusion Transformer (attention-based deep learning)
-* TS Mixer (lightweight MLP-based architecture)
-* AutoGluon TimeSeries (AutoML ensemble framework)
+1. **Non-Stationarity:** Sensor data drifts over time independent of faults (e.g., sensor aging vs component aging).
+2. **Regime Blindness:** Models mistake high-altitude cruise conditions for engine failure because they lack context-aware normalisation.
 
-Each model is treated as a **candidate building block**, not a final answer.
+**The FusionCore Hypothesis:**
 
----
-
-## What v0 Produces
-
-* Quantitative performance comparisons
-* Visual diagnostics and error analysis
-* Stability and generalisation insights
-* A short technical report summarising findings and trade-offs
-
-These outputs inform **subsequent architectural and product decisions**.
+> *A physics-informed hybrid architecture that explicitly models operating regimes will outperform "black box" Deep Learning models in false-positive rates, even if RMSE is similar.*
 
 ---
 
-## What This Is Not
+## 3. The Solution (FusionCore v0)
 
-* ❌ Not a production system
-* ❌ Not an MLOps pipeline
-* ❌ Not a claim of a “best” model
+We benchmark three SOTA paradigms to cover the "Startup Value Triangle" of Speed, Accuracy, and Simplicity.
 
-Those are **intentionally deferred** until empirical evidence is established.
-
----
-
-## Strategic Role in the Roadmap
-
-FusionCore v0 serves as:
-
-* A technical credibility anchor
-* A model selection filter
-* The foundation for scalable, risk-aware temporal intelligence systems
-
-Future versions will extend into probabilistic modelling, multi-dataset learning, and deployment-grade pipelines.
+| Architecture | Role | Why This Model? |
+| --- | --- | --- |
+| **AutoGluon (TimeSeries)** | **The Baseline** | An automated ensemble of statistical (ARIMA/ETS) and tree-based models. Acts as the "sanity check"—if Deep Learning cannot beat this, it is not worth deploying. |
+| **Temporal Fusion Transformer (TFT)** | **The Glass Box** | An attention-based architecture that offers **interpretability**. It allows us to visualise exactly which sensors the model focuses on as the engine degrades. |
+| **TSMixer (Google)** | **The Speed King** | An all-MLP architecture that offers comparable accuracy to Transformers but with significantly lower **inference latency**, making it ideal for embedded/edge deployment. |
 
 ---
 
+## 4. Key Results (Phase 0 Diagnostics)
+
+*Prior to training, our extensive EDA (see `docs/technical_report_v0.pdf`) revealed:*
+
+* **Regime Shift:** In dataset FD002, engines cycle through 6 distinct operating clusters. Random splitting results in **Data Leakage**.
+* *Mitigation:* Implemented strict **Unit-Wise Splitting** protocols.
+
+
+* **Sensor Redundancy:** Sensors 1, 5, 10, 16, 18, and 19 exhibit zero variance and are removed to improve Signal-to-Noise Ratio (SNR).
+* **Stationarity:** Sensors T24 (LPC Temp) and T30 (HPC Temp) exhibit non-stationary trends that correlate with RUL, validating their use as primary features.
+
+---
+
+## 5. Repository Structure
+
+```text
+FusionCore/
+├── docs/                  # Technical deep-dives and PDF reports
+│   ├── technical_report_v0.pdf
+│   └── benchmarking_protocols.pdf
+├── notebooks/             # Exploratory Data Analysis & Experiments
+│   ├── 01_EDA_Diagnostics.ipynb    # Initial sensor analysis
+│   ├── 02_EDA_Regimes.ipynb        # Stationarity & Regime math (The "Missing Maths")
+│   └── 03_Benchmark_Comparison.ipynb
+├── src/                   # Modular source code
+│   ├── data/              # Data loaders and regime-normalisation logic
+│   └── models/            # TFT, TSMixer, and AutoGluon definitions
+├── requirements.txt       # Python dependencies
+└── README.md              # This file
+
+```
+
+---
+
+## 6. Usage
+
+To reproduce the regime analysis:
+
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Run the Regime Diagnostics
+jupyter notebook notebooks/02_EDA_Regimes.ipynb
+
+```
+
+---
+
+## 7. Roadmap
+
+* **Phase 0 (Current):** SOTA Benchmarking & Diagnostic EDA.
+* **Phase 1:** Physics-Informed Hybridisation (Injecting Thermodynamic Ratios).
+* **Phase 2:** Scaling to N-CMAPSS (2021) using PySpark/BigQuery.
+* **Phase 3:** **FusionScale** – Agentic AI & RAG for automated maintenance prescriptions.
+
+---
+
+## 8. Author
+
+**[Your Name]**
+*MSc Data Science | Specialising in Aerospace Predictive Maintenance*
+[Link to your Portfolio/LinkedIn]
+
+---
+
+**Next Step:** Once you have saved this file, we should generate the **Python Code** for `notebooks/02_EDA_Regimes.ipynb` to fill the "Missing Maths" gap mentioned in Section 4. **Shall I generate that code now?**
