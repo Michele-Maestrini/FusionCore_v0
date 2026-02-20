@@ -1,79 +1,51 @@
 <img width="273" height="121" alt="FusionCore" src="https://github.com/user-attachments/assets/692079cc-0f95-4386-bf88-2256625293c6" />
 
-# FusionCore: Risk-Aware Predictive Maintenance System
+# FusionCore: Physics-Aware Predictive Maintenance Framework
 
-**FusionCore** is a research-led framework designed to solve the "Structural Leakage" and "Uncertainty Quantification" problems in aerospace prognostics. Moving beyond standard regression, FusionCore implements a **Forensic Validation Gate** to ensure Remaining Useful Life (RUL) estimations are driven by physical degradation signals rather than temporal metadata artefacts.
-
----
+**FusionCore $v_0$** is a research-led framework designed to solve the "Structural Leakage" and "Uncertainty Quantification" problems in aerospace prognostics. Moving beyond standard regression, FusionCore implements a rigorous **Zero-Leakage Normalisation** pipeline and a **Forensic Validation Gate** to ensure Remaining Useful Life $(RUL)$ estimations are driven by physical thermodynamic degradation signals rather than temporal metadata artefacts.
 
 ## 1. Executive Summary
 
-Predictive maintenance in safety-critical domains (Aerospace) demands more than just low RMSE; it requires **statistical honesty** and **quantifiable risk**. 
+Predictive maintenance in safety-critical domains, such as aerospace operations, demands more than just low Root Mean Square Error $(RMSE)$; it requires **statistical honesty**, **interpretability**, and **quantifiable operational risk**.
 
-FusionCore v0 establishes a rigorous "Ground Truth" by subjecting State-of-the-Art (SOTA) architectures to forensic stress testing against the NASA CMAPSS dataset. The framework evaluates the trade-off between **Probabilistic Risk Assessment** (DeepAR), **Attention-Based Interpretability** (TFT), and **Local Semantic Pattern Recognition** (PatchTST).
+FusionCore $v_0$ establishes a mathematically verified "Ground Truth" by subjecting State-of-the-Art $(SOTA)$ deep learning architectures to forensic stress testing against the NASA C-MAPSS dataset (FD001–FD004). The objective is to construct a model that learns the physics of degradation—not merely the passage of time—by explicitly mapping statistical anomalies to empirical aerodynamic efficiency loss and material fatigue.
 
----
+## 2. The Core Engineering Challenges & Solutions
 
-## 2. The Problem: "Temporal Cheating" & Regime Blindness
+Standard deep learning models often exhibit "too-good-to-be-true" performance in research settings due to critical structural flaws. FusionCore remediates these through explicit physical grounding:
 
-Standard deep learning models often exhibit "too-good-to-be-true" performance in research settings due to two critical flaws:
+- **The "Piecewise Linear" Trap:** Assuming engines degrade linearly from cycle 1 mathematically violates fatigue mechanics . FusionCore implements a **Clipped RUL** target (capped at 125 cycles), serving as the algorithmic equivalent of the elastic zone in a stress-strain curve, preventing the model from overfitting to early-life stochastic noise .
+- **Regime Blindness:** Models frequently mistake altitude-driven pressure drops for compressor failure. We resolve this via a **Zero-Leakage Normalisation** protocol. $K$-Means clustering identifies flight envelopes exclusively on the training split, and a $Z$-Score transformation decouples environmental variance from mechanical variance .
 
-1. **Structural Temporal Leakage:** Models often learn to "count down" using internal data indices rather than interpreting sensor physics. FusionCore identifies and remediates this through a **Forensic Stress Test**.
-2. **Non-Stationarity:** Models mistake high-altitude cruise conditions for engine failure because they lack context-aware normalisation.
+$$Z=\frac{X_{raw}-\mu_{regime}}{\sigma_{regime}}$$
 
-**The FusionCore Hypothesis:**
-> *A physics-aware architecture that prioritises kinematic derivatives (Deltas and Rolling Means) over raw temporal sequences will demonstrate superior reliability under anomalous sensor failure, even if traditional metrics (MAE) appear higher.*
+- **Structural Temporal Leakage:** Time-series models often "cheat" by memorising row indices. FusionCore subjects all feature spaces to a cryptographic sanitisation phase, shuffling targets to prove the absence of temporal leakage.
 
----
+## 3. The 5-Phase Architecture Pipeline
 
-## 3. The Solution (FusionCore v0)
+The repository is structured around a strict 5-phase execution plan:
 
-We benchmark three SOTA paradigms to solve the "Reliability Triangle" of Risk, Clarity, and Pattern Recognition.
+1. **Exploratory Data Analysis & Physics Grounding:** Isolating true thermodynamic variance from environmental constants using Variance Thresholding $\left(\tau=1\times10^{-5}\right)$.
+2. **Zero-Leakage Normalisation:** Unifying multi-regime datasets (FD002, FD004) into a regime-agnostic $Z$-space without forward-looking bias.
+3. **Physics-Aware Feature Engineering:** Replacing opaque lags with explicit thermodynamic virtual sensors, such as Compressor Pressure Ratio $\left(CPR=\frac{P_{30}}{P_{24}}\right)$ and Thermal Efficiency Proxies, alongside kinematic derivatives .
+4. **The Forensic Stress Test:** Proving data sanitisation using a highly interpretable XGBoost baseline and SHAP values .
+5. **SOTA Benchmarking:** Pitting advanced Transformer topologies against probabilistic RNNs via Optuna Bayesian Optimisation (TPE algorithm).
 
-| Architecture | Role | Why This Model? |
+## 4. Benchmarked Architectures
+
+We benchmark three SOTA paradigms to solve the "Reliability Triangle" of Risk, Clarity, and Pattern Recognition. Evaluation goes beyond RMSE, heavily weighting the **NASA Asymmetric Scoring Function** and **Class 2 ($<30$ cycles) Recall** for operational safety .
+
+| **Architecture** | **Role** | **Engineering Rationale** |
 | --- | --- | --- |
-| **DeepAR (Probabilistic)** | **The Risk Estimator** | Produces a probability distribution for RUL. Essential for calculating the **Probability of Failure (PoF)** rather than just a point estimate. |
-| **Temporal Fusion Transformer (TFT)** | **The Glass Box** | Utilises **Variable Selection Networks** to provide interpretability, allowing engineers to audit which sensors drive the model's decisions. |
-| **PatchTST (Transformer)** | **The Pattern Recogniser** | Segments time-series into semantic "patches" to capture local degradation trends whilst ignoring high-frequency sensor noise. |
+| **DeepAR** | **The Risk Estimator** | Probabilistic autoregressive RNN. Produces a probability distribution for RUL, allowing for uncertainty bounding ($10^{th}$ to $90^{th}$ percentiles) to assess in-flight failure risk. |
+| **Temporal Fusion Transformer (TFT)** | **The Glass Box** | Utilises specific attention mechanisms to provide multi-horizon interpretability. Allows engineers to audit which specific virtual sensors drive the degradation predictions. |
+| **PatchTST** | **The Pattern Recogniser** | Segments time-series into semantic "patches" using Channel-Independence. Excels at capturing long-term kinematic trends whilst remaining robust to high-frequency sensor noise. |
 
----
-
-## 4. Key Results (Phase 0 Diagnostics)
-
-*Prior to benchmarking, our Forensic Audit (see `notebooks/04_Forensic_Stress_Test.ipynb`) revealed:*
-
-* **Leakage Detection:** Identified that default Time-Series models achieved $10^{-9}$ MAE by "cheating" via temporal indices.
-* **Remediation:** Established an **Honest Baseline (2.28 MAE)** using shuffled tabular regression and kinematic feature engineering.
-* **Anomaly Sensitivity:** Validated that the physics-aware model reacts to synthetic sensor spikes with an immediate RUL reduction (17.26 cycles), whereas "Black Box" models ignore the fault.
-
----
-
-## 5. Repository Structure
-
-```text
-FusionCore/
-├── docs/                  # Technical deep-dives and PDF reports
-│   └── technical_report_v0.pdf
-├── notebooks/             # Exploratory Data Analysis & Stress Testing
-│   ├── 01_EDA_Diagnostics.ipynb       # Initial sensor analysis
-│   ├── 02_EDA_Regimes.ipynb           # Stationarity & Regime mathematics
-│   ├── 04_Forensic_Stress_Test.ipynb  # Leakage audit & Anomaly injection
-│   └── 05_SOTA_Benchmarking.ipynb     # DeepAR, TFT, and PatchTST
-├── src/                   # Modular source code
-│   ├── data/              # Kinematic feature engineering & v1_physics logic
-│   └── models/            # DeepAR, TFT, and PatchTST definitions
-├── requirements.txt       # Python dependencies
-└── README.md              # This file
-```
-
----
-## 6. Author
-
-
+## 5. Author
 
 **Michele Maestrini**
 
-*Data Science | Specialising in Aerospace Predictive Maintenance | Time-Series Analysis*
+Data Science/ML Engineer $||$ Specialising in Aerospace Predictive Maintenance $||$ Time-Series Analysis
 
 
 
