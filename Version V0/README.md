@@ -45,7 +45,7 @@ We benchmark three SOTA paradigms to solve the "Reliability Triangle" of Risk, C
 
 **Michele Maestrini**
 
-Data Science/ML Engineer $||$ Specialising in Aerospace Predictive Maintenance $||$ Time-Series Analysis
+Machine Learning Engineer $||$ Aerospace Prognostics (PHM) $||$ Physics-Informed Time-Series Modelling
 
 
 
